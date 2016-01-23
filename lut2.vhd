@@ -8,7 +8,7 @@ use IEEE.std_logic_1164.all;
 -- When mode_i is 1, it enters programming mode. Every clock cycle, prog_i is
 -- shifted in the memory, shifting one bit out of prog_i as well.
 
-entity cell is
+entity lut2 is
     port (
         clk_i    : in  std_logic;
         rst_i    : in  std_logic;
@@ -18,9 +18,9 @@ entity cell is
         prog_o   : out std_logic; -- shift output
         data_o   : out std_logic
     );
-end cell;
+end lut2;
 
-architecture behav of cell is
+architecture behav of lut2 is
     signal data_r     : std_logic_vector(4 downto 0);
     signal dmuxed_s   : std_logic;
     signal skip_latch_s : std_logic;

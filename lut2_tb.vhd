@@ -1,10 +1,10 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity cell_tb is
-end cell_tb;
+entity lut2_tb is
+end lut2_tb;
 
-architecture arch_cell_tb of cell_tb is
+architecture arch_lut2_tb of lut2_tb is
     signal clk_s : std_logic := '0';
     signal rst_s : std_logic;
     signal select_s : std_logic_vector(1 downto 0);
@@ -29,7 +29,7 @@ architecture arch_cell_tb of cell_tb is
 
 begin
 
-    cell: entity work.cell
+    lut2: entity work.lut2
     port map(
         clk_i => clk_s,
         rst_i => rst_s,
@@ -106,4 +106,4 @@ begin
         end if;
     end process;
 
-end arch_cell_tb;
+end arch_lut2_tb;
