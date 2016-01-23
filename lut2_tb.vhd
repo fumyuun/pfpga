@@ -23,7 +23,7 @@ architecture arch_lut2_tb of lut2_tb is
     signal inc_prog_counter_s : std_logic;
     signal inc_run_counter_s  : std_logic;
 
-    constant program_xor : std_logic_vector(4 downto 0) := "11001";
+    constant program_xor : std_logic_vector(4 downto 0) := "10110";
     constant program_or  : std_logic_vector(4 downto 0) := "10111";
     constant program_and : std_logic_vector(4 downto 0) := "10001";
 
