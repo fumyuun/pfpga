@@ -48,16 +48,15 @@ begin
             if rst_i = '1' then
                 -- reset
                 latch_r  <= '0';
-                data_r <= "00000";
+                data_r <= (others => '0');
             else
                 latch_r <= dmuxed_s;
 
                 if mode_i = '1' then
                     -- shift in prog_i
-                    data_r(0) <= data_r(1);
-                    data_r(1) <= data_r(2);
-                    data_r(2) <= data_r(3);
-                    data_r(3) <= data_r(4);
+                    for n in 0 to 3 loop
+                        data_r(n) <= data_r(n+1);
+                    end loop;
                     data_r(4) <= prog_i;
                 end if;
             end if;
