@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
 
 ----------
 -- A lut2 fpga cell. Internally, it has a 5-bit program memory with a latch.
@@ -34,13 +35,11 @@ begin
 
     comb: process(select_i, data_r)
     begin
-        case select_i is
-            when "00"   => dmuxed_s <= data_r(0);
-            when "01"   => dmuxed_s <= data_r(1);
-            when "10"   => dmuxed_s <= data_r(2);
-            when "11"   => dmuxed_s <= data_r(3);
-            when others => dmuxed_s <= 'U';
-        end case;
+        if select_i >= "00" and select_i <= "11" then
+            dmuxed_s <= data_r(to_integer(unsigned(select_i)));
+        else
+            dmuxed_s <= 'U';
+        end if;
     end process;
 
     seq: process(clk_i)
