@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
 
 entity lut2_tb is
 end lut2_tb;
@@ -46,8 +47,8 @@ begin
     comb: process(state, prog_counter_s, run_counter_s)
     begin
         next_state <= state;
-        select_s <= "00";
-        mode_s <= '0';
+        select_s <= (others => '0');
+        mode_s   <= '0';
         prog_i_s <= '0';
 
         reset_counters_s <= '0';
@@ -68,17 +69,12 @@ begin
                     mode_s <= '1';
                 end if;
             when run_st =>
-                case run_counter_s is
-                    when 0 => select_s <= "00";
-                    when 1 => select_s <= "01";
-                    when 2 => select_s <= "10";
-                    when 3 => select_s <= "11";
-                    when others => null;
-                end case;
-                if run_counter_s >= 5 then
+                if run_counter_s >= 0 and run_counter_s <= 3 then
+                    select_s(1 downto 0) <= std_logic_vector(to_unsigned(run_counter_s, 2));
+                    inc_run_counter_s <= '1';
+                elsif run_counter_s >= 4 then
                     next_state <= idle_st;
                 else
-                    inc_run_counter_s <= '1';
                 end if;
             when others => null;
         end case;
