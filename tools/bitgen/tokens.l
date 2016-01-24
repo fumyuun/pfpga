@@ -9,6 +9,7 @@ extern "C" int yywrap() { }
 
 %%
 
+[ tn]                 ;
 [a-zA-Z_][a-zA-Z0-9_]*  SAVE_TOKEN; return TIDENTIFIER;
 "=="                    return TOKEN(TCEQ);
 "!="                    return TOKEN(TCNE);
