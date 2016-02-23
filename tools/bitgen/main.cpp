@@ -7,20 +7,24 @@
 extern AST_Expression *root;
 extern int yyparse();
 
+// Maps identifier-names to a list of nodes where they occur.
 typedef std::map<std::string, std::list<AST_Identifier*> > IdMap;
+// Maps identifier-names to boolean values, for evaluation.
 typedef std::map<std::string, bool> ValueMap;
 
+// Do a depth-first search for identifiers, adds them to the identifier map.
 void find_identifiers(AST_Expression &exp, IdMap &idmap);
 void find_identifiers(AST_BinaryExpression &exp, IdMap &idmap);
 void find_identifiers(AST_UnaryExpression &exp, IdMap &idmap);
 void find_identifiers(AST_Identifier &exp, IdMap &idmap);
 
+// Evaluate a (sub-)expression given a map of boolean values for the identifiers.
 bool evaluate(AST_Expression &exp, ValueMap &valmap);
 bool evaluate(AST_BinaryExpression &exp, ValueMap &valmap);
 bool evaluate(AST_UnaryExpression &exp, ValueMap &valmap);
 bool evaluate(AST_Identifier &exp, ValueMap &valmap);
 
-ValueMap valmap_bind(IdMap &idmap, bool *vals);
+// Bind values to a valuemap.
 ValueMap valmap_bind(IdMap &id, unsigned int code);
 
 int main(int argc, char **argv)
@@ -29,11 +33,13 @@ int main(int argc, char **argv)
     ValueMap valmap;
     int permutations_size = 0;
 
+    // Call the parser
     yyparse();
     if (root == NULL) {
         return 1;
     }
 
+    // Find and print some information about identifiers
     std::cout << root->prettyPrint() << std::endl;
     find_identifiers(*root, idmap);
     std::cout << "Found " << idmap.size() << " unique identifiers" << std::endl;
@@ -41,6 +47,7 @@ int main(int argc, char **argv)
         std::cout << it->first << ": " << it->second.size() << " occurrences" << std::endl;
     }
 
+    // Check how many boolean permutations we need to generate
     if (idmap.size() <= 2) {
         permutations_size = 2;
     } else if (idmap.size() <= 4) {
@@ -51,13 +58,13 @@ int main(int argc, char **argv)
     }
     std::cout << "Generating a lut" << permutations_size << "." << std::endl;
 
+    // Bind each possible permutation and evaluate the function
     std::cout << "0";
     for(unsigned int i = 0; i < permutations_size * permutations_size; ++i) {
         valmap = valmap_bind(idmap, i);
         std::cout << evaluate(*root, valmap);
     }
     std::cout << std::endl;
-
 
     return 0;
 }
@@ -120,13 +127,14 @@ bool evaluate(AST_Identifier &exp, ValueMap &valmap) {
     return false;
 }
 
-ValueMap valmap_bind(IdMap &id, bool *vals) {
-    ValueMap valmap;
-    for (auto it = id.begin(); it != id.end(); ++it) {
-        valmap[it->first] = *vals++;
-    }
-    return valmap;
-}
+/**
+ * Bind an integer-coded representation to each identifier by using the binary representation.
+ * Some examples:
+ * 0 will bind all zero's
+ * 1 will bind 1 to the first.
+ * 3 will bind 1 to the first and second identifiers.
+ * etc.
+ */
 
 ValueMap valmap_bind(IdMap &id, unsigned int code) {
     ValueMap valmap;

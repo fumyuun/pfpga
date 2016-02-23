@@ -37,10 +37,10 @@ program : expr { root = $1; }
 ident : TIDENTIFIER { $$ = new AST_Identifier(*$1); delete $1; }
       ;
 
-expr : expr TCEQ expr_ { $$ = new AST_BinaryExpression(*$1, $2, *$3); }
-     | expr TCNE expr_ { $$ = new AST_BinaryExpression(*$1, $2, *$3); }
-     | expr TCAND expr_ { $$ = new AST_BinaryExpression(*$1, $2, *$3); }
-     | expr TCOR expr_ { $$ = new AST_BinaryExpression(*$1, $2, *$3); }
+expr : expr TCEQ expr_ { $$ = new AST_BinaryExpression(*$1, $2, *$3, "=="); }
+     | expr TCNE expr_ { $$ = new AST_BinaryExpression(*$1, $2, *$3, "!="); }
+     | expr TCAND expr_ { $$ = new AST_BinaryExpression(*$1, $2, *$3, "&&"); }
+     | expr TCOR expr_ { $$ = new AST_BinaryExpression(*$1, $2, *$3, "||"); }
      | TCNOT expr_ { $$ = new AST_UnaryExpression($1, *$2); }
      | expr_
      ;

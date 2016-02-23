@@ -28,12 +28,13 @@ struct AST_Identifier : public AST_Node {
 };
 
 struct AST_BinaryExpression : public AST_Expression {
+    std::string ppop;
     int op;
     AST_Expression& lhs;
     AST_Expression& rhs;
-    AST_BinaryExpression(AST_Expression& lhs, int op, AST_Expression& rhs) :
-        lhs(lhs), rhs(rhs), op(op) {}
-    std::string prettyPrint() {return "(" + lhs.prettyPrint() + " op " + rhs.prettyPrint() + ")"; }
+    AST_BinaryExpression(AST_Expression& lhs, int op, AST_Expression& rhs, const char* ppop) :
+        lhs(lhs), rhs(rhs), op(op), ppop(ppop) {}
+    std::string prettyPrint() {return "(" + lhs.prettyPrint() + " " + ppop + " " + rhs.prettyPrint() + ")"; }
     AST_Type getType() {return AST_BEXP;};
 };
 
